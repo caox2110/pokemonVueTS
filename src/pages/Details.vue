@@ -18,8 +18,14 @@
               class="w-48 h-48"
             />
           </div>
-          <div class="flex-1">
-            <button type="button" @click="changeChart()">{{ isBarChart ? 'Radar' : 'Bar' }}</button>
+          <div class="flex-1 grid place-items-end">
+            <button
+              type="button"
+              @click="changeChart()"
+              class="inline-block px-6 py-2.5 my-4 self-end bg-sky-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-sky-700 hover:shadow-lg focus:bg-sky-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-sky-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Change Chart to {{ isBarChart ? 'Radar' : 'Bar' }}
+            </button>
             <component :is="isBarChart ? BarChart : RadarChart" :series="stats" />
           </div>
         </div>
@@ -78,7 +84,3 @@ function changeChart() {
   isBarChart.value = !isBarChart.value;
 }
 </script>
-
-<style scope>
-
-</style>

@@ -14,7 +14,9 @@
           class="p-2 rounded hover:text-blue-500 hover:bg-gray-100"
         >
           <span class="text-sm font-normal text-gray-500 mr-3">#{{ pokemon.id }}</span>
-          <router-link :to="`/details/${pokemon.id}`" class="cursor-pointer">{{ pokemon.name }}</router-link>
+          <router-link :to="`/details/${pokemon.id}`" class="cursor-pointer">{{
+            pokemon.name
+          }}</router-link>
         </li>
       </ul>
     </div>
@@ -25,31 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, reactive, toRefs, onMounted } from 'vue';
+import { onMounted } from 'vue';
 
-import { Pokemon, getPokemons } from '../data';
+import { useGetPokemons } from '../helper';
 
-const state = reactive<{
-  pokemons: Pokemon[];
-  name: string;
-  filteredPokemons: ComputedRef<Pokemon[]>;
-}>({
-  pokemons: [] as Pokemon[],
-  name: '',
-  filteredPokemons: computed(() => searchPokemon()),
-});
-
-const { name, filteredPokemons } = toRefs(state);
+const { name, filteredPokemons, getData } = useGetPokemons();
 
 onMounted(() => getData());
-
-const getData = async () => {
-  state.pokemons = await getPokemons();
-};
-
-function searchPokemon(): Pokemon[] {
-  return state.pokemons.filter((pokemon: Pokemon) =>
-    pokemon.name.toLowerCase().includes(state.name.toLowerCase())
-  );
-}
 </script>

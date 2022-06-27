@@ -17,3 +17,7 @@ cd pokemonVueTS
 npm install
 npm run dev
 ```
+
+## Deployed with Netlify
+
+<https://pokemon-vue-ts.netlify.app>

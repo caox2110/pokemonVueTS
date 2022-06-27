@@ -36,51 +36,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import BarChart from '../components/BarChart.vue';
 import RadarChart from '../components/RadarChart.vue';
 
-import { Pokemon, getPokemon } from '../data';
+import { useGetPokemonDetail } from '../helper';
 
 const route = useRoute();
-const state = reactive<{
-  pokemon: Pokemon;
-  stats: ComputedRef<number[]>;
-  types: ComputedRef<string[]>;
-}>({
-  pokemon: null as unknown as Pokemon,
-  stats: computed<number[]>(() => pokemonStats()),
-  types: computed<string[]>(() => pokemonTypes()),
-});
 
-const { pokemon, stats, types } = toRefs(state);
-const isBarChart = ref(true);
+const { pokemon, stats, types, isBarChart, getData, changeChart } = useGetPokemonDetail();
 
-onMounted(() => getData());
+onMounted(() => getData(String(route.params.id)));
 
-watch(route, () => getData());
+watch(route, () => getData(String(route.params.id)));
 
-const getData = async () => {
-  state.pokemon = await getPokemon(String(route.params.id));
-};
-
-function pokemonStats(): number[] {
-  if (state.pokemon) {
-    return state.pokemon.stats?.map((stat) => stat.base_stat) ?? [];
-  }
-  return [];
-}
-
-function pokemonTypes(): string[] {
-  if (state.pokemon) {
-    return state.pokemon.types?.map((type) => type.type.name) ?? [];
-  }
-  return [];
-}
-
-function changeChart() {
-  isBarChart.value = !isBarChart.value;
-}
 </script>
